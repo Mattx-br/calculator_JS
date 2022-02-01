@@ -1,7 +1,5 @@
-class CalcController
-{  
-    constructor()
-    {
+class CalcController {
+    constructor() {
         // if an var beggins with an undeline '_' is supposed to be a private attribute
         this._locale = 'pt-BR';
         this._displayCalcEl = document.querySelector("#display");
@@ -12,9 +10,8 @@ class CalcController
         this.initialize();
     }
 
-    initialize()
-    {
-        setInterval( () => {
+    initialize() {
+        setInterval(() => {
             this.displayDate = this._currentDate.toLocaleDateString(this._locale);
             this.displayTime = this.currentDate.toLocaleTimeString(this._locale);
         }, 1000);
