@@ -1,0 +1,1 @@
+const clock = 0;
