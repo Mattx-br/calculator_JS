@@ -39,6 +39,9 @@ class CalcController {
 
     clearAll() {
         this._operation = [];
+        this._lastOperator = '';
+        this._lastNumber = '';
+
         this.setLastNumberToDisplay();
     }
     cancelEntry() {
@@ -156,10 +159,6 @@ class CalcController {
 
                 this.setLastOperation(value);
 
-            } else if (isNaN(value)) {
-
-                console.log("outra coisa", value);
-
             } else {
 
                 this.pushOperation(value);
@@ -173,7 +172,7 @@ class CalcController {
 
             } else {
                 let newValue = this.getLastOperation().toString() + value.toString();
-                this.setLastOperation(Number(newValue));
+                this.setLastOperation(newValue);
 
                 // update display
                 this.setLastNumberToDisplay();
@@ -187,6 +186,23 @@ class CalcController {
     setError() {
         this.displayCalc = 'Error';
     }
+
+    addDot() {
+        let lastOperation = this.getLastOperation();
+
+        if (typeof lastOperation === typeof 'string' && lastOperation.split('').indexOf('.') > -1) { return; }
+
+        // When the last item is not a number and operator neither
+        if (this.isOperator(lastOperation) || !lastOperation) {
+            this.pushOperation('0.');
+        } else {
+            // if the last item is a number
+            this.setLastOperation(lastOperation.toString() + '.');
+        }
+
+        this.setLastNumberToDisplay();
+    }
+
 
     // ============= END OF OPERATION METHODS =============
 
@@ -217,7 +233,7 @@ class CalcController {
                 this.calc();
                 break;
             case 'ponto':
-                this.addOperation('.');
+                this.addDot('.');
                 break;
             case '0':
             case '1':
