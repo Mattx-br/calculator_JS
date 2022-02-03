@@ -62,7 +62,7 @@ class CalcController {
             btn.addEventListener('dblclick', e => {
 
                 this.toggleAudio();
-                console.log('playing');
+                this._audioOnOff ? console.log('playing') : console.log('not playing');
             });
         });
     }
@@ -215,6 +215,7 @@ class CalcController {
         }
 
         this.setLastNumberToDisplay();
+        console.log(this._operation);
 
     }
 
@@ -252,8 +253,8 @@ class CalcController {
         }
 
         if (!lastNumber) lastNumber = 0;
-        this.displayCalc = lastNumber;
-
+        let formatting = lastNumber.length > 10 ? lastNumber.toExponential(2) : this.displayCalc = lastNumber;
+        return formatting;
     }
 
     addOperation(value) {
@@ -284,6 +285,7 @@ class CalcController {
 
 
         }
+        console.log(this._operation);
 
     }
 
@@ -313,7 +315,6 @@ class CalcController {
     execBtn(buttonValue) {
 
         this.playAudio();
-
         switch (buttonValue) {
             case 'ac':
                 this.clearAll();
@@ -386,6 +387,10 @@ class CalcController {
         this.displayTime = this.currentDate.toLocaleTimeString(this._locale);
     }
 
+    roundToTwo(num) {
+        return +(Math.round(num + "e+2") + "e-2");
+    }
+
 
 
     get displayTime() { return this._timeEl.innerHTML; }
@@ -397,9 +402,12 @@ class CalcController {
     get displayCalc() { return this._displayCalcEl.innerHTML; }
     set displayCalc(value) {
 
-        if (value.toString().length > 10) {
+        if (value.toString().length >= 10) {
+            // this.roundToTwo(value);
             this.setError();
-            return false;
+            // Number(value);
+            // value.toExponential(2);
+            return;
         }
 
         this._displayCalcEl.innerHTML = value;
