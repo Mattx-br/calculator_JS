@@ -62,7 +62,7 @@ class CalcController {
             btn.addEventListener('dblclick', e => {
 
                 this.toggleAudio();
-                this._audioOnOff ? console.log('playing') : console.log('not playing');
+                // this._audioOnOff ? console.log('playing') : console.log('not playing');
             });
         });
     }
@@ -175,8 +175,17 @@ class CalcController {
     }
 
     getResult() {
-        return eval(this._operation.join(""));
+        try {
+            return eval(this._operation.join(""));
+        } catch (error) {
+
+            setTimeout(() => {
+                this.setError();
+            }, 1);
+        }
     }
+
+
 
     calc() {
         let last = '';
@@ -215,7 +224,6 @@ class CalcController {
         }
 
         this.setLastNumberToDisplay();
-        console.log(this._operation);
 
     }
 
@@ -253,8 +261,12 @@ class CalcController {
         }
 
         if (!lastNumber) lastNumber = 0;
-        let formatting = lastNumber.length > 10 ? lastNumber.toExponential(2) : this.displayCalc = lastNumber;
-        return formatting;
+        try {
+            let formatting = lastNumber.length > 10 ? lastNumber.toExponential(2) : this.displayCalc = lastNumber;
+            return formatting;
+        } catch (e) {
+            return;
+        }
     }
 
     addOperation(value) {
@@ -285,7 +297,6 @@ class CalcController {
 
 
         }
-        console.log(this._operation);
 
     }
 
@@ -402,7 +413,7 @@ class CalcController {
     get displayCalc() { return this._displayCalcEl.innerHTML; }
     set displayCalc(value) {
 
-        if (value.toString().length >= 10) {
+        if (value.toString().length >= 10 || value == 2 / 0) {
             // this.roundToTwo(value);
             this.setError();
             // Number(value);
